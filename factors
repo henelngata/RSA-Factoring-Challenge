@@ -1,26 +1,26 @@
 #!/usr/bin/python3
 import sys
+import math
 
 
-def determine_factor(number):
-    i = 2
-    while i <= number:
-        if number % i == 0:
-            return (number // i, i)
-        i += 1
-    return (None, None)
+def factorize(n):
+    for i in range(2, int(math.sqrt(n)) + 1):
+        if n % i == 0:
+            return i, n // i
+    return 1, n
+
+
+def process_file(filename):
+    with open(filename, 'r') as file:
+        for line in file:
+            n = int(line.strip())
+            p, q = factorize(n)
+            print(f"{n}={p}*{q}")
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("USAGE: factors <file>")
-        sys.exit()
+    if len(sys.argv) != 2:
+        print("Usage: factors <file>")
+        sys.exit(1)
 
-    file = open(sys.argv[1], 'r')
-    lines = file.readlines()
-
-    for line in lines:
-        number = int(line)
-        x, y = determine_factor(number)
-        if x and y:
-            print("{}={}*{}".format(number, x, y))
+    process_file(sys.argv[1])
